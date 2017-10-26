@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Toggl UI Beta</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+</head>
+<body>
+
+
+<div class="container">
+    <h1>Toggl FastAdd</h1>
+    <p class="lead">Fast adding toggl entries for bussy guys ;-)</p>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="form-group">
+                <label for="apiToken">API TOKEN</label>
+                <input type="text" class="form-control" id="apiToken" name="api_token" aria-describedby="apiTokenHelp" placeholder="Enter API TOKEN">
+                <small id="apiTokenHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+            </div>
+
+            <div class="form-group">
+                <label for="workspaceId">Select Workspace</label>
+                <select class="form-control" id="workspaceId" name="wid"></select>
+            </div>
+
+            <div class="form-group">
+                <label for="projectId">Select Project</label>
+                <select class="form-control" id="projectId" name="pid"></select>
+            </div>
+            <div class="form-group">
+                <label for="entryTimeZone">Start</label>
+                <input class="form-control" type="text" value="Europe/Warsaw" id="entryTimeZone" name="tz">
+            </div>
+
+            <div class="form-group">
+                <label for="entryDate">Start</label>
+                <input class="form-control" type="text" placeholder="YYYY-MM-DD" required pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" id="entryDate" name="start">
+            </div>
+            <div class="form-group">
+                <label for="entryDuration">Czas (h)</label>
+                <input class="form-control" type="number" value="" name="duration" id="entryDuration">
+            </div>
+            <div class="form-group">
+                <label for="entryDescription">Opis</label>
+                <input type="text" class="form-control" id="entryDescription" name="description" aria-describedby="entryDescriptionHelp" placeholder="Enter description">
+                <small id="entryDescriptionHelp" class="form-text text-muted">Entry description.</small>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</div> <!-- /container -->
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+<script src="/web/components/moment/min/moment-with-locales.js"></script>
+<script src="/web/components/moment-timezone/builds/moment-timezone.min.js"></script>
+<script>
+    (function () {
+        /*
+        $.ajax({
+            method: "POST",
+            url: "/api/latest/password-recovery",
+            data: JSON.stringify({
+                email: $('form[data-form="password-recovery"] input[name="email"]').val(),
+                password: $('form[data-form="password-recovery"] input[name="password"]').val(),
+                password2: $('form[data-form="password-recovery"] input[name="password2"]').val(),
+                securityQuestion1: $('form[data-form="password-recovery"] input[name="securityQuestion1"]').val(),
+                securityAnswer1: $('form[data-form="password-recovery"] input[name="securityAnswer1"]').val(),
+                securityQuestion2: $('form[data-form="password-recovery"] input[name="securityQuestion2"]').val(),
+                securityAnswer2: $('form[data-form="password-recovery"] input[name="securityAnswer2"]').val(),
+                securityQuestion3: $('form[data-form="password-recovery"] input[name="securityQuestion3"]').val(),
+                securityAnswer3: $('form[data-form="password-recovery"] input[name="securityAnswer3"]').val()
+            }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+        }).done(function( res ) {
+            $('form[data-form="password-recovery"] div[data-validation-name]').html('').hide();
+            $('form[data-form="password-recovery"] .password-recovery-success').remove();
+
+            if (res.success) {
+                $('form[data-form="password-recovery"]')[0].reset();
+                $('form[data-form="password-recovery"]').prepend($('<div class="row password-recovery-success"><div class="col">Password changed. Please log in.</div></div>').css('color', 'green'));
+            } else if (res.errors) {
+                for (var field in res.errors) {
+                    if(!res.errors.hasOwnProperty(field)) continue;
+                    $('form[data-form="password-recovery"] div[data-validation-name="' + field + '"]').html(
+                        $('<p class="error">' + res.errors[field].join('<br>') + '</p>')
+                    ).show();
+                }
+            } else {
+                $('form[data-form="password-recovery"]').prepend($('<div class="row password-recovery-error"><div class="col">Something is wrong, please try again.</div></div>').css('color', 'red'));
+            }
+        });
+        return false;
+*/
+        $('input[name="api_token"]').change(function () {
+            $.ajax({
+                method: "GET",
+                url: "/api/workspaces",
+                data: {
+                    api_token: $('input[name="api_token"]').val()
+                },
+                dataType: "json",
+            }).done(function( res ) {
+                $('select[name="wid"]').html('');
+                if (res.results) {
+                    for (var i = 0; i < res.results.length; i++) {
+                        $('select[name="wid"]').append(
+                            $('<option value="' + res.results[i].id + '">' + res.results[i].name + '</option>')
+                        );
+                    }
+                    $('select[name="wid"]').change();
+                }
+            });
+            return false;
+        });
+
+        $('select[name="wid"]').change(function(){
+            $.ajax({
+                method: "GET",
+                url: "/api/projects",
+                data: {
+                    api_token: $('input[name="api_token"]').val(),
+                    wid: $('select[name="wid"]').val()
+                },
+                dataType: "json",
+            }).done(function( res ) {
+                console.log(res);
+                $('select[name="pid"]').html('');
+                if (res.results) {
+                    for (var i = 0; i < res.results.length; i++) {
+                        $('select[name="pid"]').append(
+                            $('<option value="' + res.results[i].id + '">' + res.results[i].name + '</option>')
+                        );
+                    }
+                }
+                console.log(res);
+            });
+        });
+    })();
+</script>
+</body>
+</html>
