@@ -32,7 +32,6 @@
             },
             dataType: "json",
         }).done(function( res ) {
-            console.log(res);
             $('select[name="pid"]').html('');
             if (res.results) {
                 for (var i = 0; i < res.results.length; i++) {
@@ -60,7 +59,21 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
         }).done(function( res ) {
-            console.log(res);
+            if (res && res.id) {
+                $('[role="alert"]')
+                    .removeClass('alert-success alert-danger')
+                    .addClass('alert-success')
+                    .text('Added!')
+                    .removeClass('hide');
+                ;
+            } else {
+                $('[role="alert"]')
+                    .removeClass('alert-success alert-danger')
+                    .addClass('alert-danger')
+                    .text('Error!' + ((res.message) ? (' ' + res.message) : '' ))
+                    .removeClass('hide');
+                ;
+            }
         });
 
         return false;
