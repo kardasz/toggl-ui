@@ -28,16 +28,6 @@ logs: env-check
 build: env-check
 	$(DOCKER_COMPOSE) build app
 
-commit: build
-	- docker login -u $(REGISTRY_USER) -p $(REGISTRY_PASSWORD) $(REGISTRY)
-	- $(DOCKER_COMPOSE) push app
-
-deploy: commit
-	- ssh $(LOGIN)@$(SERVER) docker login -u $(REGISTRY_USER) -p $(REGISTRY_PASSWORD) $(REGISTRY)
-	- ssh $(LOGIN)@$(SERVER) docker-compose -f /opt/server/docker-compose.yml pull togg-ui
-	- ssh $(LOGIN)@$(SERVER) docker-compose -f /opt/server/docker-compose.yml up -d --force-recreate
-	- ssh $(LOGIN)@$(SERVER) docker system prune --all --force
-
 rebuild: build
 	$(DOCKER_COMPOSE) up -d --force-recreate
 

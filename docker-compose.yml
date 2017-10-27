@@ -2,7 +2,7 @@ version: '3'
 
 services:
   app:
-    image: webinventions.pl:5000/kardaszeu
+    image: kardasz/toggl-ui
     build: ./
     ports:
       - "${BIND_ADDRESS:-127.0.0.1}:${BIND_PORT:-8080}:80"
