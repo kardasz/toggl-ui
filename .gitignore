@@ -1,3 +1,4 @@
 /.env
 /vendor
 /supervisord.*
+/node_modules
