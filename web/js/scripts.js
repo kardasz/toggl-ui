@@ -49,7 +49,7 @@
             url: "/api/add-entry",
             data: JSON.stringify({
                 api_token: $('input[name="api_token"]').val(),
-                pid: $('input[name="pid"]').val(),
+                pid: $('select[name="pid"]').val(),
                 start: $('input[name="start"]').val(),
                 end: $('input[name="end"]').val(),
                 duration: $('input[name="duration"]').val(),
