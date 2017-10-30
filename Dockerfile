@@ -1,4 +1,4 @@
-FROM webinventions/php7-fpm-nginx:latest
+FROM webinventions/php7-fpm-nginx:newrelic
 
 # Maintainer
 LABEL maintainer "krzysztof@kardasz.eu"
